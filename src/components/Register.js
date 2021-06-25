@@ -1,5 +1,5 @@
 import React from "react";
 
-export default function Events() {
+export default function Register() {
 	return <div></div>;
 }
