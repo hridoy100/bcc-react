@@ -81,6 +81,7 @@ export default function Home() {
 						price={data.price}
 						rating={data.rating}
 						image={data.image}
+						description={data.description}
 						id={data.id}
 						key={data.id}
 					/>

@@ -1,135 +1,119 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import SearchIcon from "@material-ui/icons/Search";
-import { LocationOn, ShoppingBasket } from "@material-ui/icons";
 import { Link } from "react-router-dom";
-
+import { FaBars } from 'react-icons/fa';
+ 
 function Header() {
+    const [openDrawer, toggleDrawer] = useState(false);
+    const drawerRef = useRef(null);
+ 
+    useEffect(() => {
+        const closeDrawer = (event) => {
+            if (drawerRef.current && (drawerRef?.current).contains(event.target)) {
+                return;
+            }
+ 
+            toggleDrawer(false);
+        };
+ 
+        document.addEventListener("mousedown", closeDrawer);
+        return () => document.removeEventListener("mousedown", closeDrawer);
+    }, []);
+ 
+    const NavbarItemsProps = {
+        openDrawer: openDrawer,
+    };
+ 
     return (
-        <Container>
-            <HeaderLogo>
-                <Link to="/">
-                    <img style={{
-                        paddingRight: "5px",
-                        marginTop: "-6px",
-                        width: "32px",
-                        verticalAlign: "middle",}} src={"https://buetcareerclub.org/img/bcc-logo.png"} />
-                        <span style={{color: "white", fontWeight: "bold"}}>BCC</span>
-                </Link>
-            </HeaderLogo>
-            <HeaderOptionAddress>
-                <LocationOn />
-                <HeaderOption>
-                    <OptionLineOne>Hello,</OptionLineOne>
-                    <OptionLineTwo>Select your address</OptionLineTwo>
-                </HeaderOption>
-            </HeaderOptionAddress>
-
-            <HeaderSearch>
-                <HeaderSearchInput type="text" />
-                <HeaderSearchIconContainer>
-                    <SearchIcon />
-                </HeaderSearchIconContainer>
-            </HeaderSearch>
-
-            <HeaderNavItems>
-                <HeaderOption>
-                    <OptionLineOne>Hello, Hridoy</OptionLineOne>
-                    <OptionLineTwo>Account & Lists</OptionLineTwo>
-                </HeaderOption>
-
-                <HeaderOption>
-                    <OptionLineOne>Returns</OptionLineOne>
-                    <OptionLineTwo>& Orders</OptionLineTwo>
-                </HeaderOption>
-                <HeaderOptionCart>
-                    <Link to="/events">
-                        <ShoppingBasket />
-                        <CartCount>5</CartCount>
-                    </Link>
-                </HeaderOptionCart>
-            </HeaderNavItems>
-        </Container>
+        <Nav>
+            <Logo to="/">BCC</Logo>
+            <Bars onClick={() => toggleDrawer(true)} />
+            <Menu ref={drawerRef} {...NavbarItemsProps}>
+                <NavLink to="/">HOME</NavLink>
+                <NavLink to="/events">EVENTS</NavLink>
+                <NavLink to="/subject-review">SUBJECT REVIEWS</NavLink>
+                <NavLink to="/team">TEAM</NavLink>
+                <NavLink to="/alumni">ALUMNI</NavLink>
+                <NavLink to="/member-list">MEMBER LIST</NavLink>
+                <NavLink to="/login">LOGIN</NavLink>
+                <NavLink to="/register">REGISTER</NavLink>
+            </Menu>
+        </Nav>
     );
 }
-
+ 
+const Nav = styled.nav`
+    background: #1b9ca6;
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem calc((100vw - 1000px) / 2);
+    z-index: 10;
+`
+ 
+const Logo = styled(Link)`
+    color: #fff;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    
+    @media only screen and (max-width: 768px){
+        padding-left: 5vw;
+        padding-bottom: 2vh;
+    }
+`
+ 
+const Menu = styled.ul`
+    display: flex;
+    list-style: none;
+ 
+    @media only screen and (max-width: 768px) {
+        position: fixed;
+        right: 0;
+        top: 0;
+        height: 100%;
+        flex-direction: column;
+        padding: 0 2rem 1rem 2rem;
+        margin-top: 0;
+        transition: 0.2s ease-out;
+        background-color: #5F939A;
+        z-index: 101;
+        transform: ${({ openDrawer }) => (openDrawer ? `translateX(0)` : `translateX(100%)`)};
+    }
+`
+ 
+const NavLink = styled(Link)`
+    color: #fff;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 0 1rem;
+    height: 100%;
+    cursor: pointer;
+ 
+    &:hover{
+        color: blue;
+    }
+ 
+    @media only screen and (max-width: 768px) {
+        padding: 1rem 0;
+        margin: 0 auto 0 0;
+    }
+`
+ 
+const Bars = styled(FaBars)`
+    display: none;
+    color: #fff;
+ 
+    @media screen and (max-width: 768px){
+        display: block;
+        position: absolute;
+        top: 7vh;
+        right: 0;
+        transform: translate(-100%, -75%);
+        font-size: 1.8rem;
+        cursor: pointer;
+    }
+`
+ 
 export default Header;
-
-const Container = styled.div`
-	height: 60px;
-	background-color: rgba(29,29,33,0.8) !important;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	color: white;
-`;
-
-const HeaderLogo = styled.div`
-	img {
-		width: 100px;
-		margin-left: 11px;
-	}
-`;
-
-const HeaderOptionAddress = styled.div`
-	padding-left: 9px;
-	display: flex;
-	align-items: center;
-`;
-
-const OptionLineOne = styled.div``;
-const OptionLineTwo = styled.div`
-	font-weight: 700;
-`;
-
-const HeaderSearch = styled.div`
-	display: flex;
-	flex-grow: 1;
-	height: 40px;
-	border-radius: 4px;
-	overflow: hidden;
-	margin-left: 4px;
-	background-color: white;
-	:focus-within {
-		box-shadow: 0 0 0 3px #f90;
-	}
-`;
-
-const HeaderSearchInput = styled.input`
-	flex-grow: 1;
-	border: 0;
-	:focus {
-		outline: none;
-	}
-`;
-
-const HeaderSearchIconContainer = styled.div`
-	background-color: #febd69;
-	width: 45px;
-	color: black;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-`;
-
-const HeaderNavItems = styled.div`
-	display: flex;
-`;
-const HeaderOption = styled.div`
-	// TRouBLe
-	padding: 10px 9px 10px 9px;
-`;
-const HeaderOptionCart = styled.div`
-	display: flex;
-
-	a {
-		display: flex;
-		align-items: center;
-		padding-right: 9px;
-		color: white;
-		text-decoration: none;
-	}
-`;
-const CartCount = styled.div`
-	padding-left: 4px;
-`;

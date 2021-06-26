@@ -10,6 +10,7 @@ import MemberList from "./components/MemberList";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Home from "./components/Home";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
               <Home />
             </Route>
           </Switch>
+          <Footer />
         </div>
       </Router>
   );
