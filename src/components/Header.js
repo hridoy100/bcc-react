@@ -26,7 +26,14 @@ function Header() {
  
     return (
         <Nav>
-            <Logo to="/">BCC</Logo>
+            <Logo to="/">
+                <img style={{
+                paddingRight: "10px",
+                marginTop: "-6px",
+                width: "32px",
+                verticalAlign: "middle",}} src={"https://buetcareerclub.org/img/bcc-logo.png"}  alt={"BCC"}/>
+                <span style={{color: "white", fontWeight: "bold", fontSize: "30px"}}>BCC</span>
+            </Logo>
             <Bars onClick={() => toggleDrawer(true)} />
             <Menu ref={drawerRef} {...NavbarItemsProps}>
                 <NavLink to="/">HOME</NavLink>
